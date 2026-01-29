@@ -1,24 +1,31 @@
 //require('dotenv').config({path: './env'})
 import dotenv from "dotenv"
+import express from "express"
 //import mongoose from "mongoose"
 //import {DB_NAME} from "./constants";
 import connectDB from "./db/index.js";
+import userRoutes from "./routes/user.routes.js"
 
 dotenv.config({
     path: './env'
 })
 
-connectDB();
+const app = express();
 
-.then(() => {
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/v1/users", userRoutes);
+
+connectDB()
+  .then(() => {
     app.listen(process.env.PORT || 8000, () => {
-        console.log(`Server is runnning at port : ${process.send.PORT}`);
-    })
-})
-.catch((err) => {
-    console.log("MongoDB connection failed !!", err);  
-})
-
+      console.log(`Server is running at port : ${process.env.PORT || 8000}`);
+    });
+  })
+  .catch((err) => {
+    console.log("MongoDB connection failed !!", err);
+  });
 
 
 
